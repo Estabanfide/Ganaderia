@@ -1,0 +1,40 @@
+@{
+    ViewBag.Title = "Vacunas";
+    var vacunas = ViewBag.Vacunas as System.Collections.Generic.IList<dynamic>;
+    var historial = ViewBag.Historial as System.Collections.Generic.IList<dynamic>;
+    var animales = ViewBag.Animales as System.Collections.Generic.IList<dynamic>;
+}
+<h2>Vacunas</h2>
+<h5>Registrar vacunación</h5>
+@using (Html.BeginForm("Registrar", "Vacunas", FormMethod.Post, new { @class = "row g-2 mb-4" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-auto">
+        <label class="form-label">Animal</label>
+        <select name="id_animal" class="form-select" required>
+            <option value="">Seleccione</option>
+            @if (animales != null) { foreach (var a in animales) { <option value="@a.IdAnimal">@a.Nombre</option> } }
+        </select>
+    </div>
+    <div class="col-auto">
+        <label class="form-label">Vacuna</label>
+        <select name="id_vacuna" class="form-select" required>
+            <option value="">Seleccione</option>
+            @if (vacunas != null) { foreach (var v in vacunas) { <option value="@v.IdVacuna">@v.Nombre</option> } }
+        </select>
+    </div>
+    <div class="col-auto">
+        <label class="form-label">Fecha</label>
+        <input type="date" name="fecha_aplicacion" class="form-control" />
+    </div>
+    <div class="col-auto d-flex align-items-end"><button type="submit" class="btn btn-primary">Registrar</button></div>
+}
+<h5>Historial reciente</h5>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead><tr><th>Animal</th><th>Vacuna</th><th>Fecha</th></tr></thead>
+        <tbody>
+            @if (historial != null) { foreach (var h in historial) { <tr><td>@h.NombreAnimal</td><td>@h.NombreVacuna</td><td>@(h.FechaAplicacion?.ToString("yyyy-MM-dd"))</td></tr> } }
+        </tbody>
+    </table>
+</div>

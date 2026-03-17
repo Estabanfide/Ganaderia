@@ -1,0 +1,55 @@
+@{
+    ViewBag.Title = "Animales";
+    var animales = ViewBag.Animales as System.Collections.IEnumerable;
+    var potreros = ViewBag.Potreros as System.Collections.IEnumerable;
+}
+<h2>Listado del ganado</h2>
+<p>@Html.ActionLink("Registrar animal", "Nuevo", "Animales", null, new { @class = "btn btn-primary" })</p>
+@using (Html.BeginForm("Index", "Animales", FormMethod.Get, new { @class = "row g-2 mb-3" }))
+{
+    <div class="col-auto"><input type="text" name="nombre" class="form-control form-control-sm" placeholder="Nombre" value="@Request.QueryString["nombre"]" /></div>
+    <div class="col-auto"><input type="text" name="raza" class="form-control form-control-sm" placeholder="Raza" value="@Request.QueryString["raza"]" /></div>
+    <div class="col-auto">
+        <select name="sexo" class="form-select form-select-sm">
+            <option value="">Sexo</option>
+            <option value="M" @(Request.QueryString["sexo"] == "M" ? "selected" : "")>M</option>
+            <option value="H" @(Request.QueryString["sexo"] == "H" ? "selected" : "")>H</option>
+        </select>
+    </div>
+    <div class="col-auto"><input type="text" name="tipo" class="form-control form-control-sm" placeholder="Tipo" value="@Request.QueryString["tipo"]" /></div>
+    <div class="col-auto"><input type="text" name="salud" class="form-control form-control-sm" placeholder="Salud" value="@Request.QueryString["salud"]" /></div>
+    <div class="col-auto">
+        <select name="id_potrero" class="form-select form-select-sm">
+            <option value="">Potrero</option>
+            @if (potreros != null) { foreach (var p in potreros) { var pd = (dynamic)p; <option value="@pd.IdPotrero" @(Request.QueryString["id_potrero"] == pd.IdPotrero.ToString() ? "selected" : "")>@pd.Nombre</option> } }
+        </select>
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-sm btn-secondary">Filtrar</button></div>
+}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead><tr><th>Nombre</th><th>Raza</th><th>Sexo</th><th>Tipo</th><th>Salud</th><th>Potrero</th><th>Finca</th><th></th></tr></thead>
+        <tbody>
+            @if (animales != null)
+            {
+                foreach (var a in animales)
+                {
+                    var ad = (dynamic)a;
+                    <tr>
+                        <td>@ad.Nombre</td>
+                        <td>@ad.Raza</td>
+                        <td>@ad.Sexo</td>
+                        <td>@ad.Tipo</td>
+                        <td>@ad.Salud</td>
+                        <td>@ad.NombrePotrero</td>
+                        <td>@ad.NombreFinca</td>
+                        <td>
+                            @Html.ActionLink("Ver", "Detalle", new { id = ad.IdAnimal }, new { @class = "btn btn-sm btn-outline-primary" })
+                            @Html.ActionLink("Editar", "Editar", new { id = ad.IdAnimal }, new { @class = "btn btn-sm btn-outline-secondary" })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

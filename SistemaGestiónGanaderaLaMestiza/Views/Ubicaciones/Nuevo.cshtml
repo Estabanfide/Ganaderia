@@ -1,0 +1,41 @@
+@{
+    ViewBag.Title = "Nuevo potrero";
+    var fincas = ViewBag.Fincas as System.Collections.IEnumerable;
+}
+<h2>Crear potrero</h2>
+
+@using (Html.BeginForm("Nuevo", "Ubicaciones", FormMethod.Post, new { @class = "mt-3" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row g-2 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Nombre del potrero</label>
+            <input type="text" name="nombre" class="form-control" required />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Finca</label>
+            <select name="id_finca" class="form-select" required>
+                <option value="">Seleccione</option>
+                @if (fincas != null)
+                {
+                    foreach (var f in fincas)
+                    {
+                        var fd = (dynamic)f;
+                        <option value="@fd.IdFinca">@fd.Nombre</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Capacidad (opcional)</label>
+            <input type="number" step="1" name="capacidad" class="form-control" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear</button>
+    @Html.ActionLink("Cancelar", "Index", "Ubicaciones", null, new { @class = "btn btn-secondary ms-2" })
+}
+

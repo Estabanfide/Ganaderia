@@ -1,0 +1,51 @@
+@{
+    ViewBag.Title = "Detalle animal";
+    var animal = ViewBag.Animal;
+    var edad = ViewBag.Edad as int?;
+    var totalCostos = ViewBag.TotalCostos as decimal?;
+    var historialVac = ViewBag.HistorialVacunacion as System.Collections.Generic.IList<dynamic>;
+    var costos = ViewBag.Costos as System.Collections.Generic.IList<dynamic>;
+    var eventos = ViewBag.EventosReproductivos as System.Collections.Generic.IList<dynamic>;
+}
+@if (animal == null)
+{
+    <p>Animal no encontrado.</p>
+}
+else
+{
+<h2>@animal.Nombre</h2>
+<p>
+    @Html.ActionLink("Editar", "Editar", new { id = animal.IdAnimal }, new { @class = "btn btn-primary" })
+    @using (Html.BeginForm("Eliminar", "Animales", new { id = animal.IdAnimal }, FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirm('¿Eliminar este animal?');" }))
+    {
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+    }
+</p>
+<dl class="row">
+    <dt class="col-sm-2">Raza</dt><dd class="col-sm-10">@animal.Raza</dd>
+    <dt class="col-sm-2">Sexo</dt><dd class="col-sm-10">@animal.Sexo</dd>
+    <dt class="col-sm-2">Tipo</dt><dd class="col-sm-10">@animal.Tipo</dd>
+    <dt class="col-sm-2">Salud</dt><dd class="col-sm-10">@animal.Salud</dd>
+    <dt class="col-sm-2">Fecha nac.</dt><dd class="col-sm-10">@(animal.FechaNac?.ToString("yyyy-MM-dd"))</dd>
+    <dt class="col-sm-2">Edad (años)</dt><dd class="col-sm-10">@(edad?.ToString() ?? "-")</dd>
+    <dt class="col-sm-2">Potrero</dt><dd class="col-sm-10">@animal.NombrePotrero</dd>
+    <dt class="col-sm-2">Finca</dt><dd class="col-sm-10">@animal.NombreFinca</dd>
+    <dt class="col-sm-2">Total costos</dt><dd class="col-sm-10">@(totalCostos?.ToString("N2") ?? "0")</dd>
+</dl>
+<h5>Historial vacunación</h5>
+<table class="table table-sm"><thead><tr><th>Vacuna</th><th>Fecha</th></tr></thead><tbody>
+    @if (historialVac != null) { foreach (var v in historialVac) { <tr><td>@v.NombreVacuna</td><td>@(v.FechaAplicacion?.ToString("yyyy-MM-dd"))</td></tr> } }
+    @if (historialVac == null || historialVac.Count == 0) { <tr><td colspan="2">Sin registros</td></tr> }
+</tbody></table>
+<h5>Costos</h5>
+<table class="table table-sm"><thead><tr><th>Monto</th><th>Fecha</th></tr></thead><tbody>
+    @if (costos != null) { foreach (var c in costos) { <tr><td>@(c.Monto?.ToString("N2"))</td><td>@(c.FechaCosto?.ToString("yyyy-MM-dd"))</td></tr> } }
+    @if (costos == null || costos.Count == 0) { <tr><td colspan="2">Sin registros</td></tr> }
+</tbody></table>
+<h5>Eventos reproductivos</h5>
+<table class="table table-sm"><thead><tr><th>Tipo</th><th>Fecha</th></tr></thead><tbody>
+    @if (eventos != null) { foreach (var e in eventos) { <tr><td>@e.TipoEvento</td><td>@(e.FechaEvento?.ToString("yyyy-MM-dd"))</td></tr> } }
+    @if (eventos == null || eventos.Count == 0) { <tr><td colspan="2">Sin registros</td></tr> }
+</tbody></table>
+}

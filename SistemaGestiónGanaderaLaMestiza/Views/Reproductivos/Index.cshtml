@@ -1,0 +1,40 @@
+@{
+    ViewBag.Title = "Eventos reproductivos";
+    var eventos = ViewBag.Eventos as System.Collections.Generic.IList<dynamic>;
+    var animales = ViewBag.Animales as System.Collections.Generic.IList<dynamic>;
+}
+<h2>Eventos reproductivos</h2>
+<h5>Registrar evento</h5>
+@using (Html.BeginForm("Registrar", "Reproductivos", FormMethod.Post, new { @class = "row g-2 mb-4" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-auto">
+        <select name="id_animal" class="form-select" required>
+            <option value="">Animal</option>
+            @if (animales != null) { foreach (var a in animales) { <option value="@a.IdAnimal">@a.Nombre</option> } }
+        </select>
+    </div>
+    <div class="col-auto"><input type="date" name="fecha_evento" class="form-control" /></div>
+    <div class="col-auto"><input type="text" name="tipo_evento" class="form-control" placeholder="Tipo (ej. Monta, Parto)" /></div>
+    <div class="col-auto"><button type="submit" class="btn btn-primary">Registrar</button></div>
+}
+@using (Html.BeginForm("Index", "Reproductivos", FormMethod.Get, new { @class = "row g-2 mb-3" }))
+{
+    <div class="col-auto">
+        <select name="id_animal" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            @if (animales != null) { foreach (var a in animales) { <option value="@a.IdAnimal" @(Request.QueryString["id_animal"] == a.IdAnimal.ToString() ? "selected" : "")>@a.Nombre</option> } }
+        </select>
+    </div>
+    <div class="col-auto"><input type="date" name="desde" class="form-control form-control-sm" value="@Request.QueryString["desde"]" /></div>
+    <div class="col-auto"><input type="date" name="hasta" class="form-control form-control-sm" value="@Request.QueryString["hasta"]" /></div>
+    <div class="col-auto"><button type="submit" class="btn btn-sm btn-secondary">Filtrar</button></div>
+}
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead><tr><th>Animal</th><th>Fecha</th><th>Tipo</th></tr></thead>
+        <tbody>
+            @if (eventos != null) { foreach (var e in eventos) { <tr><td>@e.NombreAnimal</td><td>@(e.FechaEvento?.ToString("yyyy-MM-dd"))</td><td>@e.TipoEvento</td></tr> } }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,71 @@
+@{
+    ViewBag.Title = "Inicio";
+    var metricas = ViewBag.Metricas;
+    var recientes = ViewBag.AnimalesRecientes as System.Collections.IEnumerable;
+}
+<h2>Dashboard</h2>
+<div class="row g-3 mb-4">
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Total animales</h6>
+                <h4 class="card-title">@(metricas?.Total ?? 0)</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Vacas</h6>
+                <h4 class="card-title">@(metricas?.Vacas ?? 0)</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Toros</h6>
+                <h4 class="card-title">@(metricas?.Toros ?? 0)</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Terneros</h6>
+                <h4 class="card-title">@(metricas?.Terneros ?? 0)</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-subtitle text-muted">Terneras</h6>
+                <h4 class="card-title">@(metricas?.Terneras ?? 0)</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<h5>Animales recientes</h5>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead><tr><th>Nombre</th><th>Raza</th><th>Sexo</th><th>Tipo</th><th>Potrero</th><th></th></tr></thead>
+        <tbody>
+            @if (recientes != null)
+            {
+                foreach (var a in recientes)
+                {
+                    var ad = (dynamic)a;
+                    <tr>
+                        <td>@ad.Nombre</td>
+                        <td>@ad.Raza</td>
+                        <td>@ad.Sexo</td>
+                        <td>@ad.Tipo</td>
+                        <td>@ad.NombrePotrero</td>
+                        <td>@Html.ActionLink("Ver", "Detalle", "Animales", new { id = ad.IdAnimal }, new { @class = "btn btn-sm btn-outline-primary" })</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

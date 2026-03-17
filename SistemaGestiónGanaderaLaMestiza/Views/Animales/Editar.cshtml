@@ -1,0 +1,57 @@
+@{
+    ViewBag.Title = "Editar animal";
+    var potreros = ViewBag.Potreros as System.Collections.Generic.IList<dynamic>;
+    var animal = ViewBag.Animal as dynamic;
+}
+<h2>Editar animal</h2>
+@using (Html.BeginForm("Editar", "Animales", new { id = animal.IdAnimal }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row g-2">
+        <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="Nombre" class="form-control" value="@animal.Nombre" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Fecha nacimiento</label>
+            <input type="date" name="FechaNac" class="form-control" value="@(animal.FechaNac == null ? \"\" : ((DateTime)animal.FechaNac).ToString(\"yyyy-MM-dd\"))" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Raza</label>
+            <input type="text" name="Raza" class="form-control" value="@animal.Raza" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Sexo</label>
+            <select name="Sexo" class="form-select">
+                <option value="">Seleccione</option>
+                <option value="M" @(animal.Sexo == "M" ? "selected" : "")>M</option>
+                <option value="H" @(animal.Sexo == "H" ? "selected" : "")>H</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Tipo</label>
+            <input type="text" name="Tipo" class="form-control" value="@animal.Tipo" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Salud</label>
+            <input type="text" name="Salud" class="form-control" value="@animal.Salud" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Potrero</label>
+            <select name="IdPotrero" class="form-select">
+                <option value="">Sin asignar</option>
+                @if (potreros != null)
+                {
+                    foreach (var p in potreros)
+                    {
+                        <option value="@p.IdPotrero" @(animal.IdPotrero == p.IdPotrero ? "selected" : "")>@p.Nombre</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        @Html.ActionLink("Cancelar", "Detalle", "Animales", new { id = animal.IdAnimal }, new { @class = "btn btn-secondary" })
+    </div>
+}

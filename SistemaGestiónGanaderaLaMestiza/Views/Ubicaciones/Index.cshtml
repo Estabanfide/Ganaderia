@@ -1,0 +1,17 @@
+@{
+    ViewBag.Title = "Ubicaciones";
+    var potreros = ViewBag.Potreros as System.Collections.Generic.IList<dynamic>;
+}
+<h2>Ubicaciones (potreros)</h2>
+<p>
+    @Html.ActionLink("Crear potrero", "Nuevo", "Ubicaciones", null, new { @class = "btn btn-primary" })
+</p>
+<p>@Html.ActionLink("Exportar CSV", "Exportar", "Ubicaciones", null, new { @class = "btn btn-outline-secondary" })</p>
+<div class="table-responsive">
+    <table class="table">
+        <thead><tr><th>Nombre</th><th>Finca</th><th>Capacidad</th><th>Cantidad animales</th></tr></thead>
+        <tbody>
+            @if (potreros != null) { foreach (var p in potreros) { <tr><td>@p.Nombre</td><td>@p.NombreFinca</td><td>@p.Capacidad</td><td>@p.CantidadAnimales</td></tr> } }
+        </tbody>
+    </table>
+</div>

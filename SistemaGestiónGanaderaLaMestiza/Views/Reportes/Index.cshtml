@@ -1,0 +1,47 @@
+@{
+    ViewBag.Title = "Reportes";
+    var inventario = ViewBag.Inventario as System.Collections.Generic.IList<dynamic>;
+    var distribucion = ViewBag.DistribucionSalud as System.Collections.Generic.IList<dynamic>;
+    var potreros = ViewBag.Potreros as System.Collections.Generic.IList<dynamic>;
+}
+<h2>Reportes</h2>
+<p>
+    @Html.ActionLink("Exportar CSV", "Exportar", "Reportes", new { raza = Request.QueryString["raza"], id_potrero = Request.QueryString["id_potrero"], id_finca = Request.QueryString["id_finca"], salud = Request.QueryString["salud"], rango_edad = Request.QueryString["rango_edad"] }, new { @class = "btn btn-outline-secondary" })
+</p>
+@using (Html.BeginForm("Index", "Reportes", FormMethod.Get, new { @class = "row g-2 mb-3" }))
+{
+    <div class="col-auto"><input type="text" name="raza" class="form-control form-control-sm" placeholder="Raza" value="@Request.QueryString["raza"]" /></div>
+    <div class="col-auto">
+        <select name="id_potrero" class="form-select form-select-sm">
+            <option value="">Potrero</option>
+            @if (potreros != null) { foreach (var p in potreros) { <option value="@p.IdPotrero" @(Request.QueryString["id_potrero"] == p.IdPotrero.ToString() ? "selected" : "")>@p.Nombre</option> } }
+        </select>
+    </div>
+    <div class="col-auto"><input type="text" name="salud" class="form-control form-control-sm" placeholder="Salud" value="@Request.QueryString["salud"]" /></div>
+    <div class="col-auto">
+        <select name="rango_edad" class="form-select form-select-sm">
+            <option value="">Edad</option>
+            <option value="Cachorro" @(Request.QueryString["rango_edad"] == "Cachorro" ? "selected" : "")>Cachorro (&lt;1)</option>
+            <option value="Juvenil" @(Request.QueryString["rango_edad"] == "Juvenil" ? "selected" : "")>Juvenil (1-3)</option>
+            <option value="Adulto" @(Request.QueryString["rango_edad"] == "Adulto" ? "selected" : "")>Adulto (3-10)</option>
+            <option value="Anciano" @(Request.QueryString["rango_edad"] == "Anciano" ? "selected" : "")>Anciano (&gt;10)</option>
+        </select>
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-sm btn-secondary">Filtrar</button></div>
+}
+<h5>Inventario</h5>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead><tr><th>Nombre</th><th>Raza</th><th>Sexo</th><th>Tipo</th><th>Salud</th><th>Potrero</th><th>Edad</th></tr></thead>
+        <tbody>
+            @if (inventario != null) { foreach (var i in inventario) { <tr><td>@i.Nombre</td><td>@i.Raza</td><td>@i.Sexo</td><td>@i.Tipo</td><td>@i.Salud</td><td>@i.NombrePotrero</td><td>@i.Edad</td></tr> } }
+        </tbody>
+    </table>
+</div>
+<h5>Distribución por salud</h5>
+<table class="table table-sm">
+    <thead><tr><th>Salud</th><th>Cantidad</th></tr></thead>
+    <tbody>
+        @if (distribucion != null) { foreach (var d in distribucion) { <tr><td>@d.Salud</td><td>@d.Cantidad</td></tr> } }
+    </tbody>
+</table>
