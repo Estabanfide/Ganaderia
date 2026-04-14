@@ -1,0 +1,86 @@
+:root {
+  --primary: #1a5f4a;
+  --primary-dark: #0f3d30;
+  --sidebar-width: 240px;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar.bg-primary {
+  background-color: var(--primary) !important;
+}
+
+.auth-page {
+  background: linear-gradient(135deg, #e8f5f0 0%, #d4ede4 100%);
+  padding: 2rem 1rem;
+}
+
+.auth-container {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.auth-card {
+  border-radius: 12px;
+  border: none;
+}
+
+.auth-form .btn { border-radius: 8px; }
+
+.sidebar {
+  width: var(--sidebar-width);
+  min-height: calc(100vh - 56px);
+  flex-shrink: 0;
+}
+
+.sidebar .nav-link {
+  color: #333;
+  border-radius: 8px;
+  margin-bottom: 2px;
+}
+
+.sidebar .nav-link:hover { background: rgba(26, 95, 74, 0.1); color: var(--primary); }
+
+.sidebar .nav-link i { margin-right: 8px; }
+
+.layout-with-sidebar {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.main-content {
+  flex: 1;
+  overflow: auto;
+  padding: 1.5rem;
+  background: #f8f9fa;
+}
+
+.footer { flex-shrink: 0; }
+
+.card { border-radius: 10px; border: 1px solid #e9ecef; }
+.card-header { font-weight: 600; background: #fff; border-bottom: 1px solid #e9ecef; }
+
+.table th { font-weight: 600; }
+
+.badge-estado-sano { background-color: #198754; }
+.badge-estado-enfermo { background-color: #dc3545; }
+.badge-estado-tratamiento { background-color: #fd7e14; }
+
+.btn-primary { background-color: var(--primary); border-color: var(--primary); }
+.btn-primary:hover { background-color: var(--primary-dark); border-color: var(--primary-dark); }
+
+@media (max-width: 991.98px) {
+  .sidebar { width: 100%; min-height: auto; }
+  .layout-with-sidebar { flex-direction: column; }
+}

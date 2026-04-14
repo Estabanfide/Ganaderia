@@ -1,0 +1,108 @@
+@{
+    ViewBag.Title = "Inicio";
+    var metricas = ViewBag.Metricas as SistemaGestiónGanaderaLaMestiza.Models.DashboardMetricas;
+    var recientes = ViewBag.AnimalesRecientes as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.AnimalResumen>;
+}
+<div class="page-header">
+    <div>
+        <h2 class="mb-1">Dashboard Ganadero</h2>
+        <p class="text-muted mb-0">Resumen operativo de inventario y actividad reciente.</p>
+    </div>
+    <span class="kpi-chip">Actualizado en tiempo real</span>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-2">
+        <div class="card metric-card h-100">
+            <div class="card-body">
+                <p class="metric-label">Total animales</p>
+                <p class="metric-value">@(metricas?.Total ?? 0)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="card metric-card h-100">
+            <div class="card-body">
+                <p class="metric-label">Hembras</p>
+                <p class="metric-value">@(metricas?.Vacas ?? 0)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="card metric-card h-100">
+            <div class="card-body">
+                <p class="metric-label">Machos</p>
+                <p class="metric-value">@(metricas?.Toros ?? 0)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="card metric-card h-100">
+            <div class="card-body">
+                <p class="metric-label">Terneros</p>
+                <p class="metric-value">@(metricas?.Terneros ?? 0)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="card metric-card h-100">
+            <div class="card-body">
+                <p class="metric-label">Terneras</p>
+                <p class="metric-value">@(metricas?.Terneras ?? 0)</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-2">
+        <div class="card metric-card h-100">
+            <div class="card-body">
+                <p class="metric-label">Cobertura</p>
+                <p class="metric-value">100%</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="surface-card table-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-title mb-0">Animales recientes</h3>
+        @Html.ActionLink("Ver inventario", "Index", "Animales", null, new { @class = "btn btn-sm btn-outline-primary" })
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Raza</th>
+                    <th>Sexo</th>
+                    <th>Tipo</th>
+                    <th>Potrero</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (recientes != null && recientes.Count > 0)
+                {
+                    foreach (var a in recientes)
+                    {
+                        <tr>
+                            <td>@a.Nombre</td>
+                            <td>@a.Raza</td>
+                            <td>@a.Sexo</td>
+                            <td>@a.Tipo</td>
+                            <td>@(string.IsNullOrWhiteSpace(a.NombrePotrero) ? "-" : a.NombrePotrero)</td>
+                            <td class="text-end">
+                                @Html.ActionLink("Detalle", "Detalle", "Animales", new { id = a.IdAnimal }, new { @class = "btn btn-sm btn-primary" })
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Todavia no hay animales registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+@{
+    Layout = null;
+    var loginUrl = Url.Action("Login", "Auth") ?? "/Auth/Login";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=@loginUrl" />
+    <title>La Mestiza</title>
+</head>
+<body>
+    <p>Redirigiendo al inicio de sesión...</p>
+    <script>window.location.href = '@loginUrl';</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+@model SistemaGestiónGanaderaLaMestiza.Models.Animal
+@{
+    ViewBag.Title = "Registrar animal";
+    var potreros = ViewBag.Potreros as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.Potrero>;
+}
+<div class="page-header">
+    <div>
+        <h2 class="mb-1">Registrar animal</h2>
+        <p class="text-muted mb-0">Completa los datos base para incluir un nuevo animal al inventario.</p>
+    </div>
+    @Html.ActionLink("Volver al listado", "Index", "Animales", null, new { @class = "btn btn-outline-secondary" })
+</div>
+
+<div class="surface-card">
+    @using (Html.BeginForm("Nuevo", "Animales", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Nombre</label>
+                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", required = "required" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Fecha de nacimiento</label>
+                @Html.TextBoxFor(m => m.FechaNac, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Raza</label>
+                @Html.TextBoxFor(m => m.Raza, new { @class = "form-control" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Sexo</label>
+                @Html.DropDownListFor(m => m.Sexo, new SelectList(new[] { new { v = "M", t = "Macho" }, new { v = "F", t = "Hembra" } }, "v", "t"), "Seleccione", new { @class = "form-select" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Tipo</label>
+                @Html.TextBoxFor(m => m.Tipo, new { @class = "form-control", placeholder = "Ej: Lechero, Carne" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Salud</label>
+                @Html.TextBoxFor(m => m.Salud, new { @class = "form-control", placeholder = "Ej: Estable, Observacion" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Potrero</label>
+                @Html.DropDownListFor(m => m.IdPotrero, new SelectList(potreros ?? new List<SistemaGestiónGanaderaLaMestiza.Models.Potrero>(), "IdPotrero", "Nombre"), "Sin asignar", new { @class = "form-select" })
+            </div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar animal</button>
+            @Html.ActionLink("Cancelar", "Index", "Animales", null, new { @class = "btn btn-outline-secondary" })
+        </div>
+    }
+</div>

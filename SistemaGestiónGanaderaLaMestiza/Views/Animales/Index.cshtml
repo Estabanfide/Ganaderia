@@ -1,0 +1,89 @@
+@{
+    ViewBag.Title = "Animales";
+    var animales = ViewBag.Animales as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.Animal>;
+    var potreros = ViewBag.Potreros as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.Potrero>;
+}
+<div class="page-header">
+    <div>
+        <h2 class="mb-1">Inventario de animales</h2>
+        <p class="text-muted mb-0">Consulta, filtra y administra todo tu ganado.</p>
+    </div>
+    @Html.ActionLink("Registrar animal", "Nuevo", "Animales", null, new { @class = "btn btn-primary" })
+</div>
+
+<div class="surface-card mb-3">
+    @using (Html.BeginForm("Index", "Animales", FormMethod.Get))
+    {
+        <div class="filter-grid">
+            <input type="text" name="nombre" class="form-control form-control-sm" placeholder="Nombre" value="@Request.QueryString["nombre"]" />
+            <input type="text" name="raza" class="form-control form-control-sm" placeholder="Raza" value="@Request.QueryString["raza"]" />
+            <select name="sexo" class="form-select form-select-sm">
+                <option value="">Sexo</option>
+                <option value="M" @(Request.QueryString["sexo"] == "M" ? "selected" : "")>M</option>
+                <option value="F" @(Request.QueryString["sexo"] == "F" ? "selected" : "")>F</option>
+            </select>
+            <input type="text" name="tipo" class="form-control form-control-sm" placeholder="Tipo" value="@Request.QueryString["tipo"]" />
+            <input type="text" name="salud" class="form-control form-control-sm" placeholder="Salud" value="@Request.QueryString["salud"]" />
+            <select name="id_potrero" class="form-select form-select-sm">
+                <option value="">Potrero</option>
+                @if (potreros != null)
+                {
+                    foreach (var p in potreros)
+                    {
+                        <option value="@p.IdPotrero" @(Request.QueryString["id_potrero"] == p.IdPotrero.ToString() ? "selected" : "")>@p.Nombre</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-sm btn-secondary">Filtrar</button>
+            <a href="@Url.Action("Index", "Animales")" class="btn btn-sm btn-outline-secondary">Limpiar</a>
+        </div>
+    }
+</div>
+
+<div class="surface-card table-card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Raza</th>
+                    <th>Sexo</th>
+                    <th>Tipo</th>
+                    <th>Salud</th>
+                    <th>Potrero</th>
+                    <th>Finca</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (animales != null && animales.Count > 0)
+                {
+                    foreach (var a in animales)
+                    {
+                        <tr>
+                            <td>@a.Nombre</td>
+                            <td>@a.Raza</td>
+                            <td>@a.Sexo</td>
+                            <td>@a.Tipo</td>
+                            <td>@a.Salud</td>
+                            <td>@a.NombrePotrero</td>
+                            <td>@a.NombreFinca</td>
+                            <td class="text-end">
+                                @Html.ActionLink("Detalle", "Detalle", new { id = a.IdAnimal }, new { @class = "btn btn-sm btn-primary" })
+                                @Html.ActionLink("Editar", "Editar", new { id = a.IdAnimal }, new { @class = "btn btn-sm btn-outline-secondary" })
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">No hay animales para mostrar con los filtros actuales.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

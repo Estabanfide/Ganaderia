@@ -1,0 +1,40 @@
+@{
+    ViewBag.Title = "Ubicaciones";
+    var potreros = ViewBag.Potreros as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.Potrero>;
+}
+<div class="page-header">
+    <div>
+        <h2 class="mb-1">Ubicaciones y potreros</h2>
+        <p class="text-muted mb-0">Controla la capacidad y distribucion de animales por zona.</p>
+    </div>
+    @Html.ActionLink("Exportar CSV", "Exportar", "Ubicaciones", null, new { @class = "btn btn-outline-secondary" })
+</div>
+
+<div class="surface-card table-card">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead><tr><th>Potrero</th><th>Finca</th><th>Capacidad</th><th>Cantidad animales</th><th>Ocupacion</th></tr></thead>
+            <tbody>
+                @if (potreros != null && potreros.Count > 0)
+                {
+                    foreach (var p in potreros)
+                    {
+                        var capacidad = p.Capacidad ?? 0;
+                        var ocupacion = capacidad <= 0 ? 0 : (decimal)p.CantidadAnimales * 100m / capacidad;
+                        <tr>
+                            <td>@p.Nombre</td>
+                            <td>@p.NombreFinca</td>
+                            <td>@capacidad</td>
+                            <td>@p.CantidadAnimales</td>
+                            <td>@ocupacion.ToString("N0")%</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="5" class="text-center text-muted py-4">No hay potreros disponibles.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

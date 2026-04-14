@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewBag.Title ?? "La Mestiza") - Gestion Ganadera</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="app-shell">
+    @{
+        var user = Session != null ? Session["User"] as SistemaGestiónGanaderaLaMestiza.Models.Usuario : null;
+    }
+    @if (user != null)
+    {
+        <header class="topbar">
+            <nav class="navbar navbar-expand-lg navbar-dark container-xl">
+                @Html.ActionLink("La Mestiza", "Index", "Dashboard", null, new { @class = "navbar-brand fw-semibold" })
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainMenu">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">@Html.ActionLink("Dashboard", "Index", "Dashboard", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Animales", "Index", "Animales", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Vacunas", "Index", "Vacunas", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Ubicaciones", "Index", "Ubicaciones", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Costos", "Index", "Costos", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Reproductivos", "Index", "Reproductivos", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Reportes", "Index", "Reportes", null, new { @class = "nav-link" })</li>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge rounded-pill text-bg-light text-dark">@(string.IsNullOrWhiteSpace(user.Nombre) ? "Usuario" : user.Nombre)</span>
+                        @using (Html.BeginForm("Logout", "Auth", FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-light">Cerrar sesion</button>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+    else
+    {
+        <header class="topbar">
+            <nav class="navbar navbar-dark container-xl">
+                @Html.ActionLink("La Mestiza", "Login", "Auth", null, new { @class = "navbar-brand fw-semibold" })
+            </nav>
+        </header>
+    }
+    <main class="container-xl body-content py-4">
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        }
+        @RenderBody()
+    </main>
+    <footer class="container-xl pb-4">
+        <small class="text-muted">&copy; @DateTime.Now.Year - La Mestiza - Gestion Ganadera</small>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

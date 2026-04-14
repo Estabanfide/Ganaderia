@@ -1,0 +1,117 @@
+@{
+    ViewBag.Title = "Detalle animal";
+    var animal = ViewBag.Animal as SistemaGestiónGanaderaLaMestiza.Models.Animal;
+    var edad = ViewBag.Edad as int?;
+    var totalCostos = ViewBag.TotalCostos as decimal?;
+    var historialVac = ViewBag.HistorialVacunacion as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.VacunacionRegistro>;
+    var costos = ViewBag.Costos as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.Costo>;
+    var eventos = ViewBag.EventosReproductivos as System.Collections.Generic.IList<SistemaGestiónGanaderaLaMestiza.Models.EventoReproductivo>;
+}
+@if (animal == null)
+{
+    <div class="alert alert-warning">Animal no encontrado.</div>
+}
+else
+{
+    <div class="page-header">
+        <div>
+            <h2 class="mb-1">@animal.Nombre</h2>
+            <p class="text-muted mb-0">Ficha completa del animal y su historial operativo.</p>
+        </div>
+        <div class="d-flex gap-2">
+            @Html.ActionLink("Editar", "Editar", new { id = animal.IdAnimal }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Volver", "Index", "Animales", null, new { @class = "btn btn-outline-secondary" })
+            @using (Html.BeginForm("Eliminar", "Animales", new { id = animal.IdAnimal }, FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirm('¿Eliminar este animal?');" }))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger">Eliminar</button>
+            }
+        </div>
+    </div>
+
+    <div class="surface-card mb-3">
+        <div class="row g-3">
+            <div class="col-md-6"><strong>Raza:</strong> @animal.Raza</div>
+            <div class="col-md-6"><strong>Sexo:</strong> @animal.Sexo</div>
+            <div class="col-md-6"><strong>Tipo:</strong> @animal.Tipo</div>
+            <div class="col-md-6"><strong>Salud:</strong> @animal.Salud</div>
+            <div class="col-md-6"><strong>Fecha nac.:</strong> @(animal.FechaNac?.ToString("yyyy-MM-dd") ?? "-")</div>
+            <div class="col-md-6"><strong>Edad (anos):</strong> @(edad?.ToString() ?? "-")</div>
+            <div class="col-md-6"><strong>Potrero:</strong> @animal.NombrePotrero</div>
+            <div class="col-md-6"><strong>Finca:</strong> @animal.NombreFinca</div>
+            <div class="col-md-6"><strong>Total costos:</strong> @(totalCostos?.ToString("N2") ?? "0.00")</div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-4">
+            <div class="surface-card table-card h-100">
+                <h3 class="section-title">Historial vacunacion</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th>Vacuna</th><th>Fecha</th></tr></thead>
+                        <tbody>
+                            @if (historialVac != null && historialVac.Count > 0)
+                            {
+                                foreach (var v in historialVac)
+                                {
+                                    <tr><td>@v.NombreVacuna</td><td>@(v.FechaAplicacion?.ToString("yyyy-MM-dd"))</td></tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="2" class="text-muted">Sin registros</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="surface-card table-card h-100">
+                <h3 class="section-title">Costos</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th>Monto</th><th>Fecha</th></tr></thead>
+                        <tbody>
+                            @if (costos != null && costos.Count > 0)
+                            {
+                                foreach (var c in costos)
+                                {
+                                    <tr><td>@(c.Monto?.ToString("N2"))</td><td>@(c.FechaCosto?.ToString("yyyy-MM-dd"))</td></tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="2" class="text-muted">Sin registros</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="surface-card table-card h-100">
+                <h3 class="section-title">Eventos reproductivos</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th>Tipo</th><th>Fecha</th></tr></thead>
+                        <tbody>
+                            @if (eventos != null && eventos.Count > 0)
+                            {
+                                foreach (var e in eventos)
+                                {
+                                    <tr><td>@e.TipoEvento</td><td>@(e.FechaEvento?.ToString("yyyy-MM-dd"))</td></tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="2" class="text-muted">Sin registros</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
